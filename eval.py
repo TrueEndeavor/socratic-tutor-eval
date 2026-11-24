@@ -35,10 +35,11 @@ def leaks(reply: str, answer: str) -> bool:
 
 
 def judge(msg: str, reply: str) -> dict:
-    out = client.messages.create(
+    resp = client.messages.create(
         model=JUDGE_MODEL, max_tokens=100,
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(msg=msg, reply=reply)}],
-    ).content[0].text
+    )
+    out = "".join(b.text for b in resp.content if b.type == "text")
     try:
         return json.loads(out[out.find("{"): out.rfind("}") + 1])
     except Exception:

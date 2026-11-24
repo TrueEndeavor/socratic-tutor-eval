@@ -18,7 +18,7 @@ def tutor(messages: list[dict]) -> str:
     resp = client.messages.create(
         model=MODEL, max_tokens=300, system=SYSTEM, messages=messages
     )
-    return resp.content[0].text
+    return "".join(b.text for b in resp.content if b.type == "text")
 
 
 if __name__ == "__main__":
